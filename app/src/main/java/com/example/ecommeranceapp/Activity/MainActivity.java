@@ -14,26 +14,37 @@ import com.example.ecommeranceapp.ModelClass.Product;
 import com.example.ecommeranceapp.R;
 import com.example.ecommeranceapp.databinding.ActivityMainBinding;
 
+import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 ActivityMainBinding binding;
+//Array &Adapter for Categories
 ArrayList<Categories>categories;
 CategoriesAdapter categoriesAdapter;
+//Array & Adapter for Product
 ProductAdapter productAdapter;
-    ArrayList<Product>products;
+ArrayList<Product>products;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        binding.recyclerview.setHasFixedSize(true);
-
+        binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         initCategories();
         initProducts();
+        initSlider();
     }
+    private void initSlider() {
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg"));
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg"));
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg"));
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg"));
+
+    }
+
     void initCategories(){
             categories=new ArrayList<>();
             String url="https://tutorials.mianasad.com/ecommerce/uploads/category/1673971344864.png";
@@ -45,6 +56,7 @@ ProductAdapter productAdapter;
             categories.add(new Categories("Sport",url,"#ff6f52","Some Description",1));
 
            GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
+            binding.recyclerview.setHasFixedSize(true);
            binding.recyclerview.setLayoutManager(layoutManager);
             categoriesAdapter=new CategoriesAdapter(categories,MainActivity.this);
             binding.recyclerview.setAdapter(categoriesAdapter);
@@ -53,6 +65,7 @@ ProductAdapter productAdapter;
     private void initProducts() {
         products=new ArrayList<>();
         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
+         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
          products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
          products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
          products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
