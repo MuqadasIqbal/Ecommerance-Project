@@ -1,20 +1,22 @@
 package com.example.ecommeranceapp.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.ecommeranceapp.AdapterClass.CategoriesAdapter;
 import com.example.ecommeranceapp.AdapterClass.ProductAdapter;
 import com.example.ecommeranceapp.ModelClass.Categories;
 import com.example.ecommeranceapp.ModelClass.Product;
-import com.example.ecommeranceapp.R;
 import com.example.ecommeranceapp.databinding.ActivityMainBinding;
-
-import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
+import com.example.ecommeranceapp.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -34,15 +36,15 @@ ArrayList<Product>products;
         setContentView(binding.getRoot());
 
         initCategories();
+        getCategories();
         initProducts();
-        initSlider();
+       /* initSlider();
     }
     private void initSlider() {
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg"));
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg"));
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg"));
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg"));
-
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg","some caption here"));
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg","some caption here"));
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg","some caption here"));
+        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg","some caption here"));*/
     }
 
     void initCategories(){
@@ -60,6 +62,23 @@ ArrayList<Product>products;
            binding.recyclerview.setLayoutManager(layoutManager);
             categoriesAdapter=new CategoriesAdapter(categories,MainActivity.this);
             binding.recyclerview.setAdapter(categoriesAdapter);
+        }
+        void getCategories(){
+            StringRequest request=new StringRequest(Request.Method.GET, Constants.GET_CATEGORIES_URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+
+                }
+            });
+            RequestQueue requestQueue= Volley.newRequestQueue(this);
+            requestQueue.add(request);
         }
 
     private void initProducts() {
