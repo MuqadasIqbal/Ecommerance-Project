@@ -1,6 +1,7 @@
 package com.example.ecommeranceapp.AdapterClass;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommeranceapp.Activity.MainActivity;
+import com.example.ecommeranceapp.Activity.ProductDetailActivity;
 import com.example.ecommeranceapp.ModelClass.Product;
 import com.example.ecommeranceapp.R;
 import com.example.ecommeranceapp.databinding.ItemProductBinding;
@@ -39,6 +41,17 @@ ArrayList<Product>products;
         Glide.with(context)
                 .load(product.getImage())
                 .into(holder.binding.image);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("name",product.getName());
+                intent.putExtra("image",product.getImage());
+                intent.putExtra("id",product.getId());
+                intent.putExtra("price",product.getPrice());
+                context.startActivity(intent);
+            }
+        });
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.ecommeranceapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,12 @@ import com.example.ecommeranceapp.ModelClass.Categories;
 import com.example.ecommeranceapp.ModelClass.Product;
 import com.example.ecommeranceapp.databinding.ActivityMainBinding;
 import com.example.ecommeranceapp.utils.Constants;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+
+import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -33,41 +40,111 @@ ArrayList<Product>products;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
+        binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                Intent intent=new Intent(MainActivity.this,SearchActivity.class);
+                intent.putExtra("query",text.toString());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
         setContentView(binding.getRoot());
 
         initCategories();
-        getCategories();
         initProducts();
-       /* initSlider();
+       /* initSlider();*/
     }
-    private void initSlider() {
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg","some caption here"));
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg","some caption here"));
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/special%20offer.jpg","some caption here"));
-        binding.carousel.addData(new CarouselItem("https://tutorials.mianasad.com/ecommerce/uploads/news/Announcement.jpg","some caption here"));*/
+
+    //Slider ImageShow
+ /*   private void initSlider() {
+       getRecentOffers();
     }
+    void getRecentOffers(){
+        StringRequest request=new StringRequest(Request.Method.GET, Constants.GET_OFFERS_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject MainjsonObject=new JSONObject(response);
+                    if (MainjsonObject.getString("status").equals("success")){
+                        JSONArray jsonArray=MainjsonObject.getJSONArray("news_infos");
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject object=jsonArray.getJSONObject(i);
+                            binding.carousel.addData(
+                                    new CarouselItem(
+                                           Constants.NEWS_IMAGE_URL+ object.getString("image"),
+                                            object.getString("title")
+                                    )
+                            );
+                        }
+                        categoriesAdapter.notifyDataSetChanged();
+                    }else {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+            }
+        });
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+*/
+
+    //Categories Method
 
     void initCategories(){
             categories=new ArrayList<>();
-            String url="https://tutorials.mianasad.com/ecommerce/uploads/category/1673971344864.png";
-            categories.add(new Categories("Sport","https://tutorials.mianasad.com/ecommerce/uploads/category/1673971344864.png","#18ab4e","Some Description",1));
-            categories.add(new Categories("Sport","https://tutorials.mianasad.com/ecommerce/uploads/category/1673971344864.png","#fb0504","Some Description",1));
-            categories.add(new Categories("Sport",url,"#4186ff","Some Description",1));
-            categories.add(new Categories("Sport",url,"#BF360C","Some Description",1));
-            categories.add(new Categories("Sport",url,"#ff870e","Some Description",1));
-            categories.add(new Categories("Sport",url,"#ff6f52","Some Description",1));
-
            GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
             binding.recyclerview.setHasFixedSize(true);
            binding.recyclerview.setLayoutManager(layoutManager);
             categoriesAdapter=new CategoriesAdapter(categories,MainActivity.this);
             binding.recyclerview.setAdapter(categoriesAdapter);
+
+            getCategories();
         }
         void getCategories(){
             StringRequest request=new StringRequest(Request.Method.GET, Constants.GET_CATEGORIES_URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                  try {
+                      JSONObject MainjsonObject=new JSONObject(response);
+                      if (MainjsonObject.getString("status").equals("success")){
+                          JSONArray jsonArray=MainjsonObject.getJSONArray("categories");
+                          for (int i=0;i<jsonArray.length();i++){
+                              JSONObject object=jsonArray.getJSONObject(i);
+                              Categories category=new Categories(
+                                      object.getString("name"),
+                                      Constants.CATEGORIES_IMAGE_URL +object.getString("icon"),
+                                      object.getString("color"),
+                                      object.getString("brief"),
+                                      object.getInt("id")
+                              );
+                              categories.add(category);
+                          }
+                          categoriesAdapter.notifyDataSetChanged();
+                      }else {
 
+                      }
+                  } catch (JSONException e) {
+                      e.printStackTrace();
+                  }
 
                 }
             }, new Response.ErrorListener() {
@@ -81,21 +158,55 @@ ArrayList<Product>products;
             requestQueue.add(request);
         }
 
+        //Product Method
     private void initProducts() {
         products=new ArrayList<>();
-        products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-         products.add(new Product("Bridal red lehnga","https://tutorials.mianasad.com/ecommerce/uploads/product/1673839815297.jpg","",12,4,12,1));
-
-
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         binding.productRecyclerview.setLayoutManager(layoutManager);
         productAdapter=new ProductAdapter(this,products);
         binding.productRecyclerview.setAdapter(productAdapter);
+
+        getRecentProducts();
     }
+    void getRecentProducts(){
+        String ulr=Constants.GET_PRODUCTS_URL +"?count=20";
+        StringRequest request=new StringRequest(Request.Method.GET, ulr, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject MainjsonObject=new JSONObject(response);
+                    if (MainjsonObject.getString("status").equals("success")){
+                        JSONArray jsonArray=MainjsonObject.getJSONArray("products");
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject object2=jsonArray.getJSONObject(i);
+                           Product product=new Product(
+                                   object2.getString("name"),
+                                  Constants.PRODUCTS_IMAGE_URL+ object2.getString("image"),
+                                   object2.getString("status"),
+                                   object2.getDouble("price"),
+                                   object2.getDouble("price_discount"),
+                                   object2.getInt("stock"),
+                                   object2.getInt("id")
+                           );
+                            products.add(product);
+                        }
+                        productAdapter.notifyDataSetChanged();
+                    }else {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
     }

@@ -1,6 +1,7 @@
 package com.example.ecommeranceapp.AdapterClass;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ecommeranceapp.Activity.CategoryActivity;
 import com.example.ecommeranceapp.ModelClass.Categories;
 import com.example.ecommeranceapp.R;
 import com.example.ecommeranceapp.databinding.ItemCategoriesBinding;
@@ -21,7 +23,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     Context context;
 
 
-    public CategoriesAdapter(ArrayList<Categories> categories, Context context) {
+    public CategoriesAdapter(ArrayList<Categories> categories,Context context) {
         this.categories = categories;
         this.context = context;
     }
@@ -43,6 +45,17 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         Glide.with(context)
                 .load(category.getIcon())
                 .into(holder.binding.image);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, CategoryActivity.class);
+                intent.putExtra("catid",category.getId());
+                intent.putExtra("categoreyName",category.getName());
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 
